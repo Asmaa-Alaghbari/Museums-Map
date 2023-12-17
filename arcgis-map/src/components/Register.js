@@ -43,9 +43,9 @@ function Register() {
             >
               <div className="card-body p-5 text-center">
                 <div className="mb-md-5 mt-md-4 pb-5">
-                  <h2 className="fw-bold mb-2 text-uppercase">Register</h2>
+                  <h2 className="fw-bold mb-2 text-uppercase">Museum Map - sign up</h2>
                   <p className="text-white-50 mb-5">
-                    Please enter your account and password!
+                    Please enter your username and password to sign up!
                   </p>
 
                   <div className="form-outline form-white mb-4">
@@ -55,10 +55,11 @@ function Register() {
                       className="form-control form-control-lg"
                       value={username}
                       onChange={handleUsernameOrEmailChange}
+                      placeholder="Username"
                     />
-                    <label className="form-label" for="typeEmailX">
+                    {/* <label className="form-label" for="typeEmailX">
                       Username
-                    </label>
+                    </label> */}
                   </div>
 
                   <div className="form-outline form-white mb-4">
@@ -67,10 +68,11 @@ function Register() {
                       id="typePasswordX"
                       className="form-control form-control-lg"
                       onChange={handlePasswordChange}
+                      placeholder="Password"
                     />
-                    <label className="form-label" for="typePasswordX">
+                    {/* <label className="form-label" for="typePasswordX">
                       Password
-                    </label>
+                    </label> */}
                   </div>
 
                   <button
@@ -78,8 +80,20 @@ function Register() {
                     type="submit"
                     onClick={handleSubmit}
                   >
-                    submit
+                    Sign up
                   </button>
+                </div>
+                <div>
+                  <p className="mb-0">
+                    Already have an account?
+                  </p>
+                  <a
+                    href="#!"
+                    className="text-white-50 fw-bold"
+                    onClick={() => navigate("/login")}
+                  >
+                    Login
+                  </a>
                 </div>
               </div>
             </div>
