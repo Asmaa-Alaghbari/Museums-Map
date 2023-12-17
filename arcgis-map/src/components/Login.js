@@ -49,9 +49,9 @@ function Login() {
             >
               <div className="card-body p-5 text-center">
                 <div className="mb-md-5 mt-md-4 pb-5">
-                  <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
+                  <h2 className="fw-bold mb-2 text-uppercase">Museum Map - Login</h2>
                   <p className="text-white-50 mb-5">
-                    Please enter your account and password!
+                    Please enter your username and password to login!
                   </p>
 
                   <div className="form-outline form-white mb-4">
@@ -61,10 +61,11 @@ function Login() {
                       className="form-control form-control-lg"
                       value={username}
                       onChange={handleUsernameOrEmailChange}
+                      placeholder="Username"
                     />
-                    <label className="form-label" for="typeEmailX">
+                    {/* <label className="form-label" for="typeEmailX">
                       Username
-                    </label>
+                    </label> */}
                   </div>
 
                   <div className="form-outline form-white mb-4">
@@ -73,10 +74,11 @@ function Login() {
                       id="typePasswordX"
                       className="form-control form-control-lg"
                       onChange={handlePasswordChange}
+                      placeholder="Password"
                     />
-                    <label className="form-label" for="typePasswordX">
+                    {/* <label className="form-label" for="typePasswordX">
                       Password
-                    </label>
+                    </label>  */}
                   </div>
 
                   <button
@@ -91,14 +93,14 @@ function Login() {
                 <div>
                   <p className="mb-0">
                     Don't have an account?
-                    <a
-                      href="#!"
-                      className="text-white-50 fw-bold"
-                      onClick={handleRegister}
-                    >
-                      Register
-                    </a>
                   </p>
+                  <a
+                    href="#!"
+                    className="text-white-50 fw-bold"
+                    onClick={handleRegister}
+                  >
+                    Register
+                  </a>
                 </div>
               </div>
             </div>
