@@ -45,8 +45,8 @@ function Mapper() {
 
       const graphicsLayer = new GraphicsLayer();
 
-      // Config.apiKey =
-      //   "AAPK8158143e626b4691a8c4b32faf107bfe4GrAhOcdjHeYATsVyawiycLnnZGETJ9vHd47kLExwPelaM0QaaS4zabLVWEIJvyf";
+      Config.apiKey =
+         "AAPK8158143e626b4691a8c4b32faf107bfe4GrAhOcdjHeYATsVyawiycLnnZGETJ9vHd47kLExwPelaM0QaaS4zabLVWEIJvyf";
 
       const map = new Map({
         basemap: "arcgis/topographic",
