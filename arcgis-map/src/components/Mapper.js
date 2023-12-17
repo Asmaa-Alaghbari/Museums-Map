@@ -13,11 +13,11 @@ import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer.js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../security/AuthContext";
-import Point from "@arcgis/core/geometry/Point.js";
 import "../css/Mapper.css";
 
 function Mapper() {
   const [listPoint, setListPoint] = useState([]);
+  const [favorPoint, setFavorPoint] = useState([]);
   const navigate = useNavigate();
   const authContext = useAuth();
 
@@ -26,18 +26,27 @@ function Mapper() {
     navigate("/login");
   }
 
+  function handleAddMuseumList() {
+    navigate("/select");
+  }
+
   useEffect(() => {
     async function check() {
       let click = 0;
       let point_direction = [];
       let route_direction = [];
 
-      const response = await axios.get("http://localhost:8080/api/points");
-      setListPoint(response.data);
+      const response_01 = await axios.get("http://localhost:8080/api/points");
+      setListPoint(response_01.data);
+      const response_02 = await axios.get(
+        `http://localhost:8080/api/favoritePoint/${authContext.name}`
+      );
+      setFavorPoint(response_02.data);
+
       const graphicsLayer = new GraphicsLayer();
 
-      Config.apiKey =
-        "AAPK8158143e626b4691a8c4b32faf107bfe4GrAhOcdjHeYATsVyawiycLnnZGETJ9vHd47kLExwPelaM0QaaS4zabLVWEIJvyf";
+      // Config.apiKey =
+      //   "AAPK8158143e626b4691a8c4b32faf107bfe4GrAhOcdjHeYATsVyawiycLnnZGETJ9vHd47kLExwPelaM0QaaS4zabLVWEIJvyf";
 
       const map = new Map({
         basemap: "arcgis/topographic",
@@ -58,12 +67,6 @@ function Mapper() {
           },
         },
       });
-
-      const trailheadsLayer = new FeatureLayer({
-        url: "https://services5.arcgis.com/yb2kDFtWEFCsGrIK/arcgis/rest/services/Layer_1/FeatureServer/0",
-      });
-
-      map.add(trailheadsLayer, 0);
 
       const routeUrl =
         "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World";
@@ -153,6 +156,8 @@ function Mapper() {
       const places = [
         "Select your mode",
         "Normal mode",
+        "view your favorite museums",
+        "add museums to your favorite list",
         "Top 5 museum",
         "Log out",
       ];
@@ -179,10 +184,9 @@ function Mapper() {
           view.graphics.removeAll();
           view.ui.empty("bottom-left");
           map.remove(graphicsLayer);
+
           const locatorUrl =
             "http://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
-
-          // Find places and add them to the map
           locator
             .addressToLocations(locatorUrl, {
               location: view.center,
@@ -191,7 +195,11 @@ function Mapper() {
               outFields: ["Place_addr", "PlaceName"],
             })
             .then((results) => {
+              let count = 0;
               results.forEach((result) => {
+                console.log(count++);
+                console.log(result.location);
+                console.log(result.attributes);
                 view.graphics.add(
                   new Graphic({
                     attributes: result.attributes, // Data attributes returned
@@ -218,6 +226,10 @@ function Mapper() {
           console.log("Top 5 museum");
           view.graphics.removeAll();
           view.ui.empty("bottom-left");
+          graphicsLayer.removeAll();
+          map.remove(graphicsLayer);
+          map.removeAll();
+
           listPoint.forEach((p) => {
             map.add(graphicsLayer);
 
@@ -243,8 +255,47 @@ function Mapper() {
           });
         } else if (event.target.value === "Log out") {
           handleLogout();
+        } else if (event.target.value === "add museums to your favorite list") {
+          handleAddMuseumList();
+        } else if (event.target.value === "view your favorite museums") {
+          console.log("view your favorite museums");
+          view.graphics.removeAll();
+          view.ui.empty("bottom-left");
+          graphicsLayer.removeAll();
+          map.remove(graphicsLayer);
+          map.removeAll();
+
+          favorPoint.forEach((p) => {
+            console.log(p);
+            map.add(graphicsLayer);
+
+            const point = {
+              type: "point",
+              longitude: p.longitude,
+              latitude: p.latitude,
+            };
+            const simpleMarkerSymbol = {
+              type: "simple-marker",
+              color: [255, 255, 255], // White
+              outline: {
+                color: [226, 119, 40], // Orange
+                width: 2,
+              },
+            };
+
+            const pointGraphic = new Graphic({
+              geometry: point,
+              symbol: simpleMarkerSymbol,
+            });
+            graphicsLayer.add(pointGraphic);
+          });
         }
       });
+
+      const trailheadsLayer = new FeatureLayer({
+        url: "https://services5.arcgis.com/yb2kDFtWEFCsGrIK/arcgis/rest/services/Bucharest/FeatureServer/0",
+      });
+      map.add(trailheadsLayer);
     }
     check();
   }, []);

@@ -22,7 +22,7 @@ function Register() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const result = await authContext.login(username, password);
+    const result = await authContext.register(username, password);
 
     if (result === true) {
       navigate("/login");

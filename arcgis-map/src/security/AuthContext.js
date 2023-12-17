@@ -11,26 +11,54 @@ export default function AuthProvider({ children }) {
   //3: Put some state in the context
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [res, setRes] = useState("");
+  const [name, setName] = useState("");
 
   async function login(username, password) {
     try {
-      // const response = await axios.post(
-      //   "http://localhost:8080/api/auth/login",
-      //   {
-      //     username,
-      //     password,
-      //   }
-      // );
-      // setRes(response);
-      // if (response.data === "success") {
-      //   setAuthenticated(true);
-      //   return true;
-      // } else {
-      //   logout();
-      //   return false;
-      // }
-      setAuthenticated(true);
-      return true;
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/login",
+        {
+          username,
+          password,
+        }
+      );
+      setRes(response);
+      if (response.data === "success") {
+        setName(username);
+        setAuthenticated(true);
+        return true;
+      } else {
+        logout();
+        return false;
+      }
+      // setAuthenticated(true);
+      // return true;
+    } catch (error) {
+      console.log(error);
+      logout();
+      return false;
+    }
+  }
+
+  async function register(username, password) {
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/register",
+        {
+          username,
+          password,
+        }
+      );
+      setRes(response);
+      if (response.data === "success") {
+        setAuthenticated(true);
+        return true;
+      } else {
+        logout();
+        return false;
+      }
+      // setAuthenticated(true);
+      // return true;
     } catch (error) {
       console.log(error);
       logout();
@@ -47,8 +75,10 @@ export default function AuthProvider({ children }) {
       value={{
         isAuthenticated,
         res,
+        name,
         login,
         logout,
+        register,
         setAuthenticated,
       }}
     >

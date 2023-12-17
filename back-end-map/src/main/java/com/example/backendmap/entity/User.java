@@ -3,6 +3,8 @@ package com.example.backendmap.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,4 +22,8 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Point> points;
 }

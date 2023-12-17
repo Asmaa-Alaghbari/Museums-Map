@@ -20,4 +20,7 @@ public class Point {
 
     @Column(nullable = false)
     private Float latitude;
+
+    @Column(nullable = false)
+    private String name;
 }

@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Mapper from "./components/Mapper";
+import Select from "./components/Select";
 
 function UserRoute({ children }) {
   const authContext = useAuth();
@@ -23,6 +24,7 @@ function App() {
             <Route path="/" element={<Login />}></Route>
             <Route path="/login" element={<Login />}></Route>
             <Route path="/register" element={<Register />}></Route>
+            <Route path="/select" element={<Select />}></Route>
             <Route
               path="/museum"
               element={
