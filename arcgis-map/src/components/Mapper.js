@@ -45,8 +45,8 @@ function Mapper() {
 
       const graphicsLayer = new GraphicsLayer();
 
-      // Config.apiKey =
-      //   "AAPK8158143e626b4691a8c4b32faf107bfe4GrAhOcdjHeYATsVyawiycLnnZGETJ9vHd47kLExwPelaM0QaaS4zabLVWEIJvyf";
+      Config.apiKey =
+        "AAPK8158143e626b4691a8c4b32faf107bfe4GrAhOcdjHeYATsVyawiycLnnZGETJ9vHd47kLExwPelaM0QaaS4zabLVWEIJvyf";
 
       const map = new Map({
         basemap: "arcgis/topographic",
@@ -67,6 +67,11 @@ function Mapper() {
           },
         },
       });
+
+      const trailheadsLayer = new FeatureLayer({
+        url: "https://services5.arcgis.com/yb2kDFtWEFCsGrIK/arcgis/rest/services/Bucharest/FeatureServer/0",
+      });
+      map.add(trailheadsLayer);
 
       const routeUrl =
         "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World";
@@ -157,9 +162,7 @@ function Mapper() {
         "Select your mode",
         "Normal mode",
         "view your favorite museums",
-        "add museums to your favorite list",
         "Top 5 museum",
-        "Log out",
       ];
 
       const select = document.createElement("select");
@@ -195,11 +198,7 @@ function Mapper() {
               outFields: ["Place_addr", "PlaceName"],
             })
             .then((results) => {
-              let count = 0;
               results.forEach((result) => {
-                console.log(count++);
-                console.log(result.location);
-                console.log(result.attributes);
                 view.graphics.add(
                   new Graphic({
                     attributes: result.attributes, // Data attributes returned
@@ -222,6 +221,10 @@ function Mapper() {
                 );
               });
             });
+          const trailheadsLayer = new FeatureLayer({
+            url: "https://services5.arcgis.com/yb2kDFtWEFCsGrIK/arcgis/rest/services/Bucharest/FeatureServer/0",
+          });
+          map.add(trailheadsLayer);
         } else if (event.target.value === "Top 5 museum") {
           console.log("Top 5 museum");
           view.graphics.removeAll();
@@ -240,10 +243,11 @@ function Mapper() {
             };
             const simpleMarkerSymbol = {
               type: "simple-marker",
-              color: [255, 255, 255], // White
+              color: "#000000", // White
+              size: "12px",
               outline: {
-                color: [226, 119, 40], // Orange
-                width: 1,
+                color: "#ffffff",
+                width: "2px",
               },
             };
 
@@ -253,10 +257,10 @@ function Mapper() {
             });
             graphicsLayer.add(pointGraphic);
           });
-        } else if (event.target.value === "Log out") {
-          handleLogout();
-        } else if (event.target.value === "add museums to your favorite list") {
-          handleAddMuseumList();
+          const trailheadsLayer = new FeatureLayer({
+            url: "https://services5.arcgis.com/yb2kDFtWEFCsGrIK/arcgis/rest/services/Bucharest/FeatureServer/0",
+          });
+          map.add(trailheadsLayer);
         } else if (event.target.value === "view your favorite museums") {
           console.log("view your favorite museums");
           view.graphics.removeAll();
@@ -266,7 +270,6 @@ function Mapper() {
           map.removeAll();
 
           favorPoint.forEach((p) => {
-            console.log(p);
             map.add(graphicsLayer);
 
             const point = {
@@ -276,10 +279,11 @@ function Mapper() {
             };
             const simpleMarkerSymbol = {
               type: "simple-marker",
-              color: [255, 255, 255], // White
+              color: "#000000", // White
+              size: "12px",
               outline: {
-                color: [226, 119, 40], // Orange
-                width: 2,
+                color: "#ffffff",
+                width: "2px",
               },
             };
 
@@ -289,18 +293,49 @@ function Mapper() {
             });
             graphicsLayer.add(pointGraphic);
           });
+
+          const trailheadsLayer = new FeatureLayer({
+            url: "https://services5.arcgis.com/yb2kDFtWEFCsGrIK/arcgis/rest/services/Bucharest/FeatureServer/0",
+          });
+          map.add(trailheadsLayer);
         }
       });
-
-      const trailheadsLayer = new FeatureLayer({
-        url: "https://services5.arcgis.com/yb2kDFtWEFCsGrIK/arcgis/rest/services/Bucharest/FeatureServer/0",
-      });
-      map.add(trailheadsLayer);
     }
     check();
   }, []);
 
-  return <div id="viewDiv" style={{ height: "100vh" }}></div>;
+  return (
+    <div id="viewDiv" style={{ height: "100vh", width: "90%", float: "left" }}>
+      <button
+        type="button"
+        className="btn btn-primary mt-1 mb-1"
+        onClick={handleLogout}
+      >
+        logout
+      </button>
+      <button
+        type="button"
+        className="btn btn-primary mt-1 mb-1"
+        onClick={handleAddMuseumList}
+      >
+        add museums to your favorite list
+      </button>
+      <table className="table mt-1 mb-1">
+        <tr>
+          <th>colour</th>
+          <th>explanation</th>
+        </tr>
+        <tr>
+          <td>black</td>
+          <td>museum</td>
+        </tr>
+        <tr>
+          <td>red</td>
+          <td>bus or metrou</td>
+        </tr>
+      </table>
+    </div>
+  );
 }
 
 export default Mapper;
