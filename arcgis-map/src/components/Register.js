@@ -1,65 +1,51 @@
+// Register.js
+
 import "../css/Register.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../security/AuthContext";
 
-function Register() {
+export default function Register() {
   const [username, setUsername] = useState("");
-
   const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
-
   const authContext = useAuth();
-
-  function handleUsernameOrEmailChange(event) {
-    setUsername(event.target.value);
-  }
-
-  function handlePasswordChange(event) {
-    setPassword(event.target.value);
-  }
 
   async function handleSubmit(event) {
     event.preventDefault();
+    if (!username || !password) {
+      alert("Please enter both username and password");
+      return;
+    }
     const result = await authContext.register(username, password);
 
     if (result === true) {
       navigate("/login");
+    } else {
+      alert("Error during registration");
     }
   }
 
   return (
-    <div
-      className="gradient-custom "
-      style={{ height: "920px", width: "100%" }}
-    >
-      <div className="container py-5 ">
-        <div className="row d-flex justify-content-center align-items-center mt-5 ">
+    <div className="gradient-custom" style={{ height: "920px", width: "100%" }}>
+      <div className="container py-5">
+        <div className="row d-flex justify-content-center align-items-center mt-5">
           <div className="col-12 col-md-8 col-lg-6 col-xl-5">
-            <div
-              className="card bg-dark text-white"
-              style={{ borderRadius: "1rem" }}
-            >
+            <div className="card bg-dark text-white" style={{ borderRadius: "1rem" }}>
               <div className="card-body p-5 text-center">
-                <div className="mb-md-5 mt-md-4 pb-5">
-                  <h2 className="fw-bold mb-2 text-uppercase">Museum Map - sign up</h2>
-                  <p className="text-white-50 mb-5">
-                    Please enter your username and password to sign up!
-                  </p>
+                <form onSubmit={handleSubmit} className="mb-md-5 mt-md-4 pb-5">
+                  <h2 className="fw-bold mb-2 text-uppercase">Museum Map - Sign Up</h2>
+                  <p className="text-white-50 mb-5">Please enter your username and password to sign up!</p>
 
                   <div className="form-outline form-white mb-4">
                     <input
-                      type="email"
+                      type="text"
                       id="typeEmailX"
                       className="form-control form-control-lg"
                       value={username}
-                      onChange={handleUsernameOrEmailChange}
+                      onChange={(e) => setUsername(e.target.value)}
                       placeholder="Username"
                     />
-                    {/* <label className="form-label" for="typeEmailX">
-                      Username
-                    </label> */}
                   </div>
 
                   <div className="form-outline form-white mb-4">
@@ -67,31 +53,19 @@ function Register() {
                       type="password"
                       id="typePasswordX"
                       className="form-control form-control-lg"
-                      onChange={handlePasswordChange}
+                      onChange={(e) => setPassword(e.target.value)}
                       placeholder="Password"
                     />
-                    {/* <label className="form-label" for="typePasswordX">
-                      Password
-                    </label> */}
                   </div>
 
-                  <button
-                    className="btn btn-outline-light btn-lg px-5"
-                    type="submit"
-                    onClick={handleSubmit}
-                  >
-                    Sign up
+                  <button className="btn btn-outline-light btn-lg px-5" type="submit">
+                    Sign Up
                   </button>
-                </div>
+                </form>
+
                 <div>
-                  <p className="mb-0">
-                    Already have an account?
-                  </p>
-                  <a
-                    href="#!"
-                    className="text-white-50 fw-bold"
-                    onClick={() => navigate("/login")}
-                  >
+                  <p className="mb-0">Already have an account?</p>
+                  <a href="#!" className="text-white-50 fw-bold" onClick={() => navigate("/login")}>
                     Login
                   </a>
                 </div>
@@ -103,5 +77,3 @@ function Register() {
     </div>
   );
 }
-
-export default Register;
