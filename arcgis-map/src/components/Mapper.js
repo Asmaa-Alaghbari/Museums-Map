@@ -1,4 +1,9 @@
+// Mapper.js
+
+import "../css/Mapper.css";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../security/AuthContext";
 import Config from "@arcgis/core/config";
 import Map from "@arcgis/core/Map.js";
 import MapView from "@arcgis/core/views/MapView";
@@ -11,11 +16,8 @@ import FeatureSet from "@arcgis/core/rest/support/FeatureSet";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer.js";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer.js";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../security/AuthContext";
-import "../css/Mapper.css";
 
-function Mapper() {
+export default function Mapper() {
   const [listPoint, setListPoint] = useState([]);
   const [favorPoint, setFavorPoint] = useState([]);
   const navigate = useNavigate();
@@ -161,7 +163,7 @@ function Mapper() {
       const places = [
         "Select your mode",
         "Normal mode",
-        "view your favorite museums",
+        "Favorite museums",
         "Top 5 museum",
       ];
 
@@ -171,6 +173,7 @@ function Mapper() {
         "style",
         "width: 175px; font-family: 'Avenir Next W00'; font-size: 1em"
       );
+      select.classList.add("custom-select");
 
       places.forEach((p) => {
         const option = document.createElement("option");
@@ -179,7 +182,7 @@ function Mapper() {
         select.appendChild(option);
       });
 
-      view.ui.add(select, "bottom-right");
+      view.ui.add(select, "top-right");
 
       select.addEventListener("change", (event) => {
         if (event.target.value === "Normal mode") {
@@ -199,6 +202,8 @@ function Mapper() {
             })
             .then((results) => {
               results.forEach((result) => {
+                console.log("----");
+                console.log(result);
                 view.graphics.add(
                   new Graphic({
                     attributes: result.attributes, // Data attributes returned
@@ -261,8 +266,8 @@ function Mapper() {
             url: "https://services5.arcgis.com/yb2kDFtWEFCsGrIK/arcgis/rest/services/Bucharest/FeatureServer/0",
           });
           map.add(trailheadsLayer);
-        } else if (event.target.value === "view your favorite museums") {
-          console.log("view your favorite museums");
+        } else if (event.target.value === "Favorite museums") {
+          console.log("Favorite museums");
           view.graphics.removeAll();
           view.ui.empty("bottom-left");
           graphicsLayer.removeAll();
@@ -305,37 +310,28 @@ function Mapper() {
   }, []);
 
   return (
-    <div id="viewDiv" style={{ height: "100vh", width: "90%", float: "left" }}>
-      <button
-        type="button"
-        className="btn btn-primary mt-1 mb-1"
-        onClick={handleLogout}
-      >
-        logout
-      </button>
-      <button
-        type="button"
-        className="btn btn-primary mt-1 mb-1"
-        onClick={handleAddMuseumList}
-      >
-        add museums to your favorite list
-      </button>
-      <table className="table mt-1 mb-1">
-        <tr>
-          <th>colour</th>
-          <th>explanation</th>
-        </tr>
-        <tr>
-          <td>black</td>
-          <td>museum</td>
-        </tr>
-        <tr>
-          <td>red</td>
-          <td>bus or metrou</td>
-        </tr>
-      </table>
+    <div id="viewDiv" style={{ height: "100vh", width: "100vw"}}>
+      <div className="mapper-controls">
+        <button type="button" className="btn btn-primary btn-logout" onClick={handleLogout}>
+          Logout
+        </button>
+        <button type="button" className="btn btn-add-museum" onClick={handleAddMuseumList}>
+          Add Museums to Favorite List
+        </button>
+      </div>
+      <div className="mapper-table">
+        <table className="table">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+          <tr>
+          <td><i className="fas fa-circle" style={{ color: "black", backgroundColor: "transparent" }}></i></td>
+            <td>Museum</td>
+          </tr>
+          <tr>
+          <td><i className="fas fa-circle" style={{ color: "red", backgroundColor: "transparent" }}></i></td>
+            <td>Bus or Subway</td>
+          </tr>
+        </table>
+      </div>
     </div>
   );
 }
-
-export default Mapper;
