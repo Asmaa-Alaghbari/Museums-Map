@@ -10,6 +10,9 @@ Museums-Map is an interactive web application designed to provide users with a c
 - Oana Cocoara (342C2)
 - Tung NGUYEN QUANG (342C5)
 
+## PPT:
+https://docs.google.com/presentation/d/1jRwNTzfTNt4jS7Palnv-dRDrAh6LI9KfIb0Yc1wpsdM/edit#slide=id.g2ac42c8433c_4_60
+
 ## Programming languages:
 - Front-end: React
 - Back-end: Spring
