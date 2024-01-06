@@ -22,8 +22,8 @@
 
 .mapper-table {
   position: absolute;
-  bottom: 25px;
-  left: 25px;
+  bottom: 135px;
+  right: 25px;
   z-index: 10; 
 }
 

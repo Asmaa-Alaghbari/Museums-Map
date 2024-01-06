@@ -239,6 +239,8 @@ export default function Mapper() {
           map.removeAll();
 
           listPoint.forEach((p) => {
+            console.log(p);
+            console.log(p);
             map.add(graphicsLayer);
 
             const point = {
