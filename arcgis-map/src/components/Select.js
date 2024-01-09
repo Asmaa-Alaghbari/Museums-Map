@@ -14,18 +14,21 @@ export default function Select() {
   const [pointToRemove, setPointToRemove] = useState([]);
   const [allPoints, setAllPoints] = useState([]);
 
-  
   const fetchMuseumData = async () => {
     try {
-      const response_01 = await axios.get(`http://localhost:8080/api/favoritePoint/${authContext.name}`);
+      const response_01 = await axios.get(
+        `http://localhost:8080/api/favoritePoint/${authContext.name}`
+      );
       setNotFavoritePoint(response_01.data);
 
-      const response_02 = await axios.get(`http://localhost:8080/api/allPoints`);
+      const response_02 = await axios.get(
+        `http://localhost:8080/api/allPoints`
+      );
       setAllPoints(response_02.data);
     } catch (error) {
-      console.error('Error fetching museum data:', error);
+      console.error("Error fetching museum data:", error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchMuseumData();
@@ -37,25 +40,33 @@ export default function Select() {
     if (isChecked) {
       setFavoritePoint([...favoritePoint, value]); // Add to temporary favorite list
     } else {
-      setFavoritePoint(favoritePoint.filter(item => item !== value)); // Remove from temporary favorite list
+      setFavoritePoint(favoritePoint.filter((item) => item !== value)); // Remove from temporary favorite list
     }
   };
 
   const handleRemoveFavorite = (museumName) => {
-  setNotFavoritePoint(notFavoritePoint.filter(item => item.name !== museumName));
-  setPointToRemove([...pointToRemove, museumName]); // Add museum to the removal list
-};
+    setNotFavoritePoint(
+      notFavoritePoint.filter((item) => item.name !== museumName)
+    );
+    setPointToRemove([...pointToRemove, museumName]); // Add museum to the removal list
+  };
 
   async function handleUpdate() {
     try {
       // Process adding to favorites
       if (favoritePoint.length > 0) {
-        await axios.post(`http://localhost:8080/api/addFavoritePoint/${authContext.name}`, { favorPoints: favoritePoint });
+        await axios.post(
+          `http://localhost:8080/api/addFavoritePoint/${authContext.name}`,
+          { favorPoints: favoritePoint }
+        );
       }
 
       // Process removal from favorites
       if (pointToRemove.length > 0) {
-        await axios.post(`http://localhost:8080/api/removeFavoritePoint/${authContext.name}`, { notFavorPoints: pointToRemove });
+        await axios.post(
+          `http://localhost:8080/api/removeFavoritePoint/${authContext.name}`,
+          { notFavorPoints: pointToRemove }
+        );
       }
 
       // Refresh data
@@ -66,7 +77,7 @@ export default function Select() {
   }
 
   const handleBack = () => {
-      navigate("/museum");
+    navigate("/museum");
   };
 
   const renderMuseumList = (museums, isFavorite) => {
@@ -77,7 +88,10 @@ export default function Select() {
             <div className="museum-info">
               <h5>{museum.name}</h5>
               {isFavorite ? (
-                <button onClick={() => handleRemoveFavorite(museum.name)} className="remove-favorite-btn">
+                <button
+                  onClick={() => handleRemoveFavorite(museum.name)}
+                  className="remove-favorite-btn"
+                >
                   <i className="fas fa-times"></i>
                 </button>
               ) : (
@@ -100,9 +114,7 @@ export default function Select() {
     <div className="container select-container">
       <div className="museum-section">
         <h6 className="section-title">All Museums</h6>
-        <div className="museum-grid">
-          {renderMuseumList(allPoints, false)}
-        </div>
+        <div className="museum-grid">{renderMuseumList(allPoints, false)}</div>
       </div>
       <div className="museum-section">
         <h6 className="section-title">My Museums</h6>
@@ -110,10 +122,16 @@ export default function Select() {
           {renderMuseumList(notFavoritePoint, true)}
         </div>
       </div>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
-      <button className="btn update-btn" onClick={handleUpdate}>Update Results</button>
-      <button className="btn back-btn" onClick={handleBack}><i className="fas fa-arrow-left"></i></button>
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      ></link>
+      <button className="btn update-btn" onClick={handleUpdate}>
+        Update Results
+      </button>
+      <button className="btn back-btn" onClick={handleBack}>
+        <i className="fas fa-arrow-left"></i>
+      </button>
     </div>
   );
 }
-

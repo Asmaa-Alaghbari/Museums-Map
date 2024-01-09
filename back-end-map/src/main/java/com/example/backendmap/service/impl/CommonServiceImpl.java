@@ -61,7 +61,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public String addPointToUser(List<PointDTO> points, String username) {
         User user_isi = userRepository.findByUsername(username);
-        List<Point> favorPoints = new ArrayList<>();
+        Set<Point> favorPoints = new HashSet<>();
         for (PointDTO point : points) {
             Optional<Point> optionalPoint = pointRepository.findByLatitudeAndLongitude(point.getLatitude(), point.getLongitude());
             optionalPoint.ifPresent(favorPoints::add);
@@ -74,7 +74,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public String removePointFromUser(List<PointDTO> points, String username) {
         User user_isi = userRepository.findByUsername(username);
-        List<Point> favorPoints = user_isi.getPoints();
+        Set<Point> favorPoints = user_isi.getPoints();
         for (PointDTO point : points) {
             Optional<Point> optionalPoint = pointRepository.findByLatitudeAndLongitude(point.getLatitude(), point.getLongitude());
             optionalPoint.ifPresent(favorPoints::remove);
@@ -85,7 +85,7 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    public List<Point> getFavoritePoint(String username) {
+    public Set<Point> getFavoritePoint(String username) {
 
         User user_isi = userRepository.findByUsername(username);
         return user_isi.getPoints();
@@ -101,7 +101,7 @@ public class CommonServiceImpl implements CommonService {
         log.info("add");
         User user_isi = userRepository.findByUsername(username);
 
-        List<Point> curPoints = user_isi.getPoints();
+        Set<Point> curPoints = user_isi.getPoints();
         Set<Point> pointSet = new HashSet<>(curPoints);
 
         for (String name : favPoint.getFavorPoints()) {
@@ -110,7 +110,8 @@ public class CommonServiceImpl implements CommonService {
             log.info(point.getId().toString());
             pointSet.add(point);
         }
-        user_isi.setPoints(new ArrayList<>(pointSet));
+        log.info("new add");
+        user_isi.setPoints(new HashSet<>(pointSet));
         userRepository.save(user_isi);
         return "success";
     }
@@ -120,12 +121,12 @@ public class CommonServiceImpl implements CommonService {
         log.info("remove");
         User user_isi = userRepository.findByUsername(username);
 
-        List<Point> curPoints = user_isi.getPoints();
+        Set<Point> curPoints = user_isi.getPoints();
         Set<Point> pointSet = new HashSet<>(curPoints);
 
         pointSet.removeIf(point -> notFavPoint.getNotFavorPoints().contains(point.getName()));
 
-        user_isi.setPoints(new ArrayList<>(pointSet));
+        user_isi.setPoints(new HashSet<>(pointSet));
         userRepository.save(user_isi);
         return "success";
     }

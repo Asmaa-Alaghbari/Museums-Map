@@ -3,7 +3,7 @@ package com.example.backendmap.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -13,6 +13,7 @@ import java.util.List;
 @Builder
 @Table(name = "user_isi")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -24,6 +25,11 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Point> points;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_isi_points",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "points_id"))
+    private Set<Point> points;
+
 }

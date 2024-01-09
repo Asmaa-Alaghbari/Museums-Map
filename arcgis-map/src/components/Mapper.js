@@ -184,7 +184,7 @@ export default function Mapper() {
 
       view.ui.add(select, "top-right");
 
-      select.addEventListener("change", (event) => {
+      select.addEventListener("change", async (event) => {
         if (event.target.value === "Normal mode") {
           console.log("Normal mode");
           view.graphics.removeAll();
@@ -231,6 +231,8 @@ export default function Mapper() {
           });
           map.add(trailheadsLayer);
         } else if (event.target.value === "Top 5 museum") {
+          const res_01 = await axios.get("http://localhost:8080/api/points");
+
           console.log("Top 5 museum");
           view.graphics.removeAll();
           view.ui.empty("bottom-left");
@@ -238,7 +240,8 @@ export default function Mapper() {
           map.remove(graphicsLayer);
           map.removeAll();
 
-          listPoint.forEach((p) => {
+          // listPoint.forEach((p) => {
+          res_01.data.forEach((p) => {
             console.log(p);
             console.log(p);
             map.add(graphicsLayer);
@@ -270,15 +273,20 @@ export default function Mapper() {
           map.add(trailheadsLayer);
         } else if (event.target.value === "Favorite museums") {
           console.log("Favorite museums");
+          const res_02 = await axios.get(
+            `http://localhost:8080/api/favoritePoint/${authContext.name}`
+          );
           view.graphics.removeAll();
           view.ui.empty("bottom-left");
           graphicsLayer.removeAll();
           map.remove(graphicsLayer);
           map.removeAll();
 
-          favorPoint.forEach((p) => {
+          // favorPoint.forEach((p) => {
+          res_02.data.forEach((p) => {
             map.add(graphicsLayer);
-
+            console.log(p);
+            console.log(p);
             const point = {
               type: "point",
               longitude: p.longitude,
@@ -312,24 +320,45 @@ export default function Mapper() {
   }, []);
 
   return (
-    <div id="viewDiv" style={{ height: "100vh", width: "100vw"}}>
+    <div id="viewDiv" style={{ height: "100vh", width: "100vw" }}>
       <div className="mapper-controls">
-        <button type="button" className="btn btn-primary btn-logout" onClick={handleLogout}>
+        <button
+          type="button"
+          className="btn btn-primary btn-logout"
+          onClick={handleLogout}
+        >
           Logout
         </button>
-        <button type="button" className="btn btn-add-museum" onClick={handleAddMuseumList}>
+        <button
+          type="button"
+          className="btn btn-add-museum"
+          onClick={handleAddMuseumList}
+        >
           Add Museums to Favorite List
         </button>
       </div>
       <div className="mapper-table">
         <table className="table">
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+          ></link>
           <tr>
-          <td><i className="fas fa-circle" style={{ color: "black", backgroundColor: "transparent" }}></i></td>
+            <td>
+              <i
+                className="fas fa-circle"
+                style={{ color: "black", backgroundColor: "transparent" }}
+              ></i>
+            </td>
             <td>Museum</td>
           </tr>
           <tr>
-          <td><i className="fas fa-circle" style={{ color: "red", backgroundColor: "transparent" }}></i></td>
+            <td>
+              <i
+                className="fas fa-circle"
+                style={{ color: "red", backgroundColor: "transparent" }}
+              ></i>
+            </td>
             <td>Bus or Subway</td>
           </tr>
         </table>

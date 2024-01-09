@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -48,7 +49,7 @@ public class CommonController {
     }
 
     @GetMapping(value = "/api/favoritePoint/{username}")
-    public ResponseEntity<List<Point>> getFavoritePoint(@PathVariable String username) {
+    public ResponseEntity<Set<Point>> getFavoritePoint(@PathVariable String username) {
         return new ResponseEntity<>(commonService.getFavoritePoint(username), HttpStatus.OK);
     }
 

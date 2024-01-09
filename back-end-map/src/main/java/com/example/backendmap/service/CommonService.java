@@ -8,6 +8,7 @@ import com.example.backendmap.payload.LoginDTO;
 import com.example.backendmap.payload.RegisterDTO;
 
 import java.util.List;
+import java.util.Set;
 
 public interface CommonService {
 
@@ -21,7 +22,7 @@ public interface CommonService {
 
     String removePointFromUser(List<PointDTO> points, String username);
 
-    List<Point> getFavoritePoint(String username);
+    Set<Point> getFavoritePoint(String username);
 
     List<Point> getAllPoints();
 
